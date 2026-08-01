@@ -1,7 +1,7 @@
 /* ==========================================================================
    BRAND BUZZER ACADEMY — INTERACTIVE APPLICATION ENGINE
    Handles rendering, progress tracking, mandatory team registration,
-   search, quizzes, bookmarks, and CSV progress export.
+   password-protected manager review, search, quizzes, and CSV export.
    ========================================================================== */
 
 class AppEngine {
@@ -20,6 +20,10 @@ class AppEngine {
     // Default Light Theme as requested
     this.theme = localStorage.getItem('bb_theme') || 'light';
     
+    // Manager Security Auth State
+    this.isManagerAuthenticated = false;
+    this.managerPassword = 'Hellobuzz123@';
+
     this.init();
   }
 
@@ -131,9 +135,58 @@ class AppEngine {
   }
 
   /* --------------------------------------------------------------------------
-     MANAGER DASHBOARD & SUBMISSIONS REVIEW
+     PASSWORD-PROTECTED MANAGER DASHBOARD & REVIEW
      -------------------------------------------------------------------------- */
+  openManagerAuthModal() {
+    const dialog = document.getElementById('manager-auth-modal');
+    const passInput = document.getElementById('manager-pass-input');
+    if (dialog) {
+      dialog.showModal();
+      if (passInput) {
+        passInput.value = '';
+        passInput.focus();
+      }
+    }
+  }
+
+  closeManagerAuthModal() {
+    const dialog = document.getElementById('manager-auth-modal');
+    if (dialog) dialog.close();
+  }
+
+  authenticateManager(e) {
+    if (e) e.preventDefault();
+
+    const passInput = document.getElementById('manager-pass-input');
+    const enteredPass = passInput ? passInput.value.trim() : '';
+
+    if (enteredPass === this.managerPassword) {
+      this.isManagerAuthenticated = true;
+      this.closeManagerAuthModal();
+      this.showToast('Manager authenticated! Dashboard unlocked. 🔓', 'success');
+      this.openManagerModal();
+    } else {
+      this.showToast('Access Denied: Incorrect Manager Password.', 'danger');
+      if (passInput) {
+        passInput.value = '';
+        passInput.focus();
+      }
+    }
+  }
+
+  lockManagerSession() {
+    this.isManagerAuthenticated = false;
+    this.closeManagerModal();
+    this.showToast('Manager session locked. 🔒', 'info');
+  }
+
   openManagerModal() {
+    // Password Gate Check
+    if (!this.isManagerAuthenticated) {
+      this.openManagerAuthModal();
+      return;
+    }
+
     const dialog = document.getElementById('manager-dashboard-modal');
     const tableContainer = document.getElementById('manager-table-container');
     const countText = document.getElementById('manager-submissions-count');
@@ -195,6 +248,11 @@ class AppEngine {
   }
 
   exportTeamSubmissionsCSV() {
+    if (!this.isManagerAuthenticated) {
+      this.openManagerAuthModal();
+      return;
+    }
+
     if (this.teamSubmissions.length === 0) {
       this.showToast('No team progress data to export.', 'warning');
       return;
@@ -220,7 +278,7 @@ class AppEngine {
       csvContent += row.join(',') + '\n';
     });
 
-    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const blob = new Blob([content = csvContent], { type: 'text/csv;charset=utf-8;' });
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.setAttribute('href', url);
@@ -933,7 +991,7 @@ class AppEngine {
       profileBtn.addEventListener('click', () => this.openProfileModal(false));
     }
 
-    // Manager Dashboard Trigger
+    // Password-Protected Manager Dashboard Trigger
     const managerBtn = document.getElementById('manager-dashboard-btn');
     if (managerBtn) {
       managerBtn.addEventListener('click', () => this.openManagerModal());

@@ -49,9 +49,9 @@
         <span id="header-user-name" class="desktop-only">Team Profile</span>
       </button>
 
-      <!-- Manager Dashboard Button -->
-      <button id="manager-dashboard-btn" class="btn btn-sm btn-outline-accent" title="Manager Review & Team Submissions">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+      <!-- Password-Protected Manager Dashboard Button -->
+      <button id="manager-dashboard-btn" class="btn btn-sm btn-outline-accent" title="Manager Password Protected Review">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
         <span class="desktop-only">Team Answers</span>
       </button>
 
@@ -133,7 +133,7 @@
             <span class="label">Next Module</span>
             <span class="title" id="next-module-title">---</span>
           </div>
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 19 5"></polyline></svg>
         </button>
       </nav>
     </main>
@@ -237,6 +237,31 @@
     </div>
   </dialog>
 
+  <!-- Manager Password Authentication Modal -->
+  <dialog id="manager-auth-modal" class="modal-dialog">
+    <div class="modal-backdrop" onclick="app.closeManagerAuthModal()"></div>
+    <div class="modal-content profile-modal-content">
+      <div class="modal-header">
+        <h3>Manager Access Security</h3>
+        <button class="icon-btn" onclick="app.closeManagerAuthModal()">&times;</button>
+      </div>
+      <div class="profile-modal-body">
+        <p class="profile-intro-text">The Team Answers Dashboard is password protected. Enter the manager key to view team submissions and export progress reports.</p>
+        
+        <form id="manager-auth-form" onsubmit="app.authenticateManager(event)">
+          <div class="form-group">
+            <label for="manager-pass-input">Manager Key *</label>
+            <input type="password" id="manager-pass-input" placeholder="Enter manager password..." required autocomplete="current-password">
+          </div>
+
+          <div class="form-actions">
+            <button type="submit" class="btn btn-primary btn-full-width">Unlock Dashboard</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </dialog>
+
   <!-- Manager Review & Team Quiz Submissions Dashboard Modal -->
   <dialog id="manager-dashboard-modal" class="modal-dialog">
     <div class="modal-backdrop" onclick="app.closeManagerModal()"></div>
@@ -253,6 +278,7 @@
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
               Export Team Progress CSV
             </button>
+            <button class="btn btn-sm btn-ghost" onclick="app.lockManagerSession()">Lock Access</button>
           </div>
         </div>
 
