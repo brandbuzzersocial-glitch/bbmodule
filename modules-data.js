@@ -1330,11 +1330,11 @@ const ACADEMY_MODULES = [
     coreConcepts: `
       <h3>1. The Brand Buzzer Daily Schedule</h3>
       <ul>
-        <li><strong>09:00 AM — Morning Check-In:</strong> Post brief 3-bullet plan in Slack <code>#daily-standup</code> (1. Priority for today, 2. Secondary tasks, 3. Blockers/Dependencies).</li>
-        <li><strong>09:15 AM — Priority Focus Block:</strong> Tackle high-cognitive deep work (writing copy, building ad campaigns, designing graphics) during morning peak energy.</li>
-        <li><strong>01:00 PM — Midday Sync & Messages:</strong> Review Slack messages, clear inbox, update task statuses in ClickUp.</li>
-        <li><strong>04:00 PM — Handoffs & Reviews:</strong> Move completed tasks to 'Internal Review' stage in ClickUp for team lead sign-off.</li>
-        <li><strong>05:45 PM — End-of-Day (EOD) Update:</strong> Post brief status update in ClickUp tasks and log completed deliverables.</li>
+        <li><strong>10:00 AM — Morning Check-In:</strong> Post brief 3-bullet plan in Slack <code>#daily-standup</code> (1. Priority for today, 2. Secondary tasks, 3. Blockers/Dependencies).</li>
+        <li><strong>10:15 AM — Priority Focus Block:</strong> Tackle high-cognitive deep work (writing copy, building ad campaigns, designing graphics) during morning peak energy.</li>
+        <li><strong>02:00 PM — Midday Sync & Messages:</strong> Review Slack messages, clear inbox, update task statuses in ClickUp.</li>
+        <li><strong>05:00 PM — Handoffs & Reviews:</strong> Move completed tasks to 'Internal Review' stage in ClickUp for team lead sign-off.</li>
+        <li><strong>06:45 PM — End-of-Day (EOD) Update:</strong> Post brief status update in ClickUp tasks and log completed deliverables.</li>
       </ul>
 
       <h3>2. Task Status Protocol in ClickUp</h3>
@@ -1358,14 +1358,14 @@ const ACADEMY_MODULES = [
     `,
     commonMistakes: [
       "Leaving tasks in 'In Progress' for days without adding status comment updates.",
-      "Waiting until 5:00 PM to inform a team lead about a missing asset due that day."
+      "Waiting until 6:00 PM to inform a team lead about a missing asset due that day."
     ],
     bestPractices: [
       "Flag blockers early in the morning so team leads can assist.",
       "Keep ClickUp task time estimates realistic."
     ],
     checklist: [
-      "Morning Standup posted in Slack by 9:15 AM",
+      "Morning Standup posted in Slack by 10:15 AM",
       "ClickUp task due dates reviewed and updated",
       "End-of-day task status updates recorded"
     ],
@@ -1376,13 +1376,13 @@ const ACADEMY_MODULES = [
       {
         question: "When should you notify your team lead if you encounter a blocker or missing asset for a task due today?",
         options: [
-          "At 6:00 PM after the workday ends",
-          "Immediately in the morning standup or as soon as the blocker is identified",
+          "At 7:00 PM after the workday ends",
+          "Immediately in the 10:00 AM morning standup or as soon as the blocker is identified",
           "Never—just ignore the deadline",
           "Wait 3 days"
         ],
         correct: 1,
-        explanation: "Flagging blockers early allows the team lead to intervene, resolve client dependencies, or reassign tasks."
+        explanation: "Flagging blockers early in the 10:00 AM standup allows the team lead to intervene, resolve client dependencies, or reassign tasks."
       }
     ]
   },
@@ -1406,7 +1406,7 @@ const ACADEMY_MODULES = [
     whyItMatters: "Clear rules around availability prevent misunderstandings, build trust, and protect employees from after-hours burnout.",
     coreConcepts: `
       <h3>1. Availability & Core Hours</h3>
-      <p>Our agency core operational window is <strong>10:00 AM to 5:00 PM (Mon-Fri)</strong>. During this window, team members are expected to acknowledge Slack messages within 30 minutes unless set to 'Focus Mode' or 'In a Meeting'.</p>
+      <p>Our agency core operational window is <strong>10:00 AM to 7:00 PM (Mon-Fri)</strong>. During this window, team members are expected to acknowledge Slack messages within 30 minutes unless set to 'Focus Mode' or 'In a Meeting'.</p>
 
       <h3>2. Slack Etiquette Rules</h3>
       <ul>
