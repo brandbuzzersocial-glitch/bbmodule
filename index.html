@@ -44,7 +44,7 @@
       </div>
 
       <!-- Team Member Profile Button -->
-      <button id="user-profile-btn" class="btn btn-sm btn-ghost" title="Team Member Profile & Free Sync">
+      <button id="user-profile-btn" class="btn btn-sm btn-ghost" title="Team Member Profile">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
         <span id="header-user-name" class="desktop-only">Team Profile</span>
       </button>
@@ -193,26 +193,26 @@
     </div>
   </dialog>
 
-  <!-- Team Member Profile & Free Sync Modal -->
+  <!-- Mandatory Team Member Profile Modal -->
   <dialog id="profile-modal" class="modal-dialog">
-    <div class="modal-backdrop" onclick="app.closeProfileModal()"></div>
+    <div id="profile-modal-backdrop" class="modal-backdrop"></div>
     <div class="modal-content profile-modal-content">
       <div class="modal-header">
-        <h3>Team Member Registration & Free Sync</h3>
-        <button class="icon-btn" onclick="app.closeProfileModal()">&times;</button>
+        <h3>Team Member Registration</h3>
+        <button id="profile-close-x-btn" class="icon-btn hidden" onclick="app.closeProfileModal()">&times;</button>
       </div>
       <div class="profile-modal-body">
-        <p class="profile-intro-text">Fill in your details. Your module completions and quiz responses will be saved automatically so your manager can track your progress.</p>
+        <p class="profile-intro-text">Welcome to Brand Buzzer Academy! Please enter your details below to unlock access to the training handbook and record your module progress.</p>
         
         <form id="user-profile-form" onsubmit="app.saveUserProfile(event)">
           <div class="form-group">
             <label for="profile-full-name">Full Name *</label>
-            <input type="text" id="profile-full-name" placeholder="e.g. Sarah Jenkins" required>
+            <input type="text" id="profile-full-name" placeholder="e.g. Sarah Jenkins" required autocomplete="name">
           </div>
 
           <div class="form-group">
             <label for="profile-email">Work Email *</label>
-            <input type="email" id="profile-email" placeholder="e.g. sarah@brandbuzzer.com" required>
+            <input type="email" id="profile-email" placeholder="e.g. sarah@brandbuzzer.com" required autocomplete="email">
           </div>
 
           <div class="form-group">
@@ -229,19 +229,8 @@
             </select>
           </div>
 
-          <div class="form-group">
-            <label for="profile-employee-id">Employee / Intern ID</label>
-            <input type="text" id="profile-employee-id" placeholder="e.g. BB-INT-2026">
-          </div>
-
-          <div class="form-group">
-            <label for="webhook-url-input">100% Free Google Sheet / Webhook Sync URL (Optional)</label>
-            <input type="url" id="webhook-url-input" placeholder="https://script.google.com/macros/s/.../exec">
-            <span class="field-hint">Paste free Google Apps Script Webhook URL to sync completion progress directly to a Google Sheet!</span>
-          </div>
-
           <div class="form-actions">
-            <button type="submit" class="btn btn-primary">Save Profile</button>
+            <button type="submit" class="btn btn-primary btn-full-width">Start Academy Training</button>
           </div>
         </form>
       </div>
@@ -272,7 +261,7 @@
         </div>
       </div>
     </div>
-  </div>
+  </dialog>
 
   <!-- Toast Notification Container -->
   <div id="toast-container" class="toast-container"></div>

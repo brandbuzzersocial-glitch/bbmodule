@@ -1,8 +1,7 @@
 /* ==========================================================================
    BRAND BUZZER ACADEMY — INTERACTIVE APPLICATION ENGINE
-   Handles rendering, progress tracking, state persistence, search,
-   quizzes, bookmarks, templates export, Team Member Profiles,
-   and 100% Free Google Sheet / Webhook Synchronization.
+   Handles rendering, progress tracking, mandatory team registration,
+   search, quizzes, bookmarks, and CSV progress export.
    ========================================================================== */
 
 class AppEngine {
@@ -16,17 +15,16 @@ class AppEngine {
     this.userProfile = JSON.parse(localStorage.getItem('bb_user_profile') || JSON.stringify({
       fullName: '',
       email: '',
-      role: 'Intern / Trainee',
-      employeeId: '',
-      webhookUrl: ''
+      role: 'Intern / Trainee'
     }));
-    this.theme = localStorage.getItem('bb_theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+    // Default Light Theme as requested
+    this.theme = localStorage.getItem('bb_theme') || 'light';
     
     this.init();
   }
 
   init() {
-    // Apply Theme
+    // Apply Theme (Default Light)
     document.documentElement.setAttribute('data-theme', this.theme);
 
     // Initial Hash Check or Default Module
@@ -46,10 +44,15 @@ class AppEngine {
     this.updateHeaderProfileBadge();
     this.setupEventListeners();
     this.setupScrollListeners();
+
+    // Mandatory Registration Gate Check
+    if (!this.userProfile.fullName || !this.userProfile.email) {
+      setTimeout(() => this.openProfileModal(true), 300);
+    }
   }
 
   /* --------------------------------------------------------------------------
-     TEAM MEMBER PROFILE & FREE WEBHOOK SYNC
+     MANDATORY TEAM MEMBER PROFILE
      -------------------------------------------------------------------------- */
   updateHeaderProfileBadge() {
     const nameEl = document.getElementById('header-user-name');
@@ -65,14 +68,10 @@ class AppEngine {
     const nameInput = document.getElementById('profile-full-name');
     const emailInput = document.getElementById('profile-email');
     const roleInput = document.getElementById('profile-role');
-    const empInput = document.getElementById('profile-employee-id');
-    const webhookInput = document.getElementById('webhook-url-input');
 
     if (nameInput) nameInput.value = this.userProfile.fullName || '';
     if (emailInput) emailInput.value = this.userProfile.email || '';
     if (roleInput) roleInput.value = this.userProfile.role || 'Intern / Trainee';
-    if (empInput) empInput.value = this.userProfile.employeeId || '';
-    if (webhookInput) webhookInput.value = this.userProfile.webhookUrl || '';
   }
 
   saveUserProfile(e) {
@@ -81,46 +80,54 @@ class AppEngine {
     const fullName = document.getElementById('profile-full-name').value.trim();
     const email = document.getElementById('profile-email').value.trim();
     const role = document.getElementById('profile-role').value;
-    const employeeId = document.getElementById('profile-employee-id').value.trim();
-    const webhookUrl = document.getElementById('webhook-url-input').value.trim();
 
-    this.userProfile = { fullName, email, role, employeeId, webhookUrl };
+    if (!fullName || !email) {
+      this.showToast('Please provide your Full Name and Work Email.', 'warning');
+      return;
+    }
+
+    this.userProfile = { fullName, email, role };
     localStorage.setItem('bb_user_profile', JSON.stringify(this.userProfile));
 
     this.updateHeaderProfileBadge();
+    
+    // Enable Close Button
+    const xBtn = document.getElementById('profile-close-x-btn');
+    if (xBtn) xBtn.classList.remove('hidden');
+
     this.closeProfileModal();
-    this.showToast(`Profile updated for ${fullName}!`, 'success');
+    this.showToast(`Welcome ${fullName}! Academy unlocked.`, 'success');
   }
 
-  openProfileModal() {
+  openProfileModal(isMandatory = false) {
     const dialog = document.getElementById('profile-modal');
-    if (dialog) dialog.showModal();
+    const xBtn = document.getElementById('profile-close-x-btn');
+    const backdrop = document.getElementById('profile-modal-backdrop');
+
+    if (!dialog) return;
+
+    const isRegistered = !!(this.userProfile.fullName && this.userProfile.email);
+
+    if (isMandatory || !isRegistered) {
+      if (xBtn) xBtn.classList.add('hidden');
+      if (backdrop) backdrop.onclick = null; // Prevent backdrop click closing
+    } else {
+      if (xBtn) xBtn.classList.remove('hidden');
+      if (backdrop) backdrop.onclick = () => this.closeProfileModal();
+    }
+
+    dialog.showModal();
   }
 
   closeProfileModal() {
+    // Only allow closing if registration is completed
+    if (!this.userProfile.fullName || !this.userProfile.email) {
+      this.showToast('Registration required to access academy modules.', 'warning');
+      return;
+    }
+
     const dialog = document.getElementById('profile-modal');
     if (dialog) dialog.close();
-  }
-
-  /* --------------------------------------------------------------------------
-     FREE WEBHOOK / GOOGLE SHEETS SYNC ENGINE
-     -------------------------------------------------------------------------- */
-  async postToFreeWebhook(dataPayload) {
-    if (!this.userProfile.webhookUrl) return;
-
-    try {
-      await fetch(this.userProfile.webhookUrl, {
-        method: 'POST',
-        mode: 'no-cors',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(dataPayload)
-      });
-      console.log(`[Free Webhook Sync] Payload sent to ${this.userProfile.webhookUrl}`);
-    } catch (err) {
-      console.log(`[Free Webhook Notice] ${err.message}. Progress recorded locally.`);
-    }
   }
 
   /* --------------------------------------------------------------------------
@@ -133,7 +140,7 @@ class AppEngine {
 
     if (!dialog || !tableContainer) return;
 
-    countText.textContent = `${this.teamSubmissions.length} Team Action Records Tracked`;
+    countText.textContent = `${this.teamSubmissions.length} Action Records Tracked`;
 
     if (this.teamSubmissions.length === 0) {
       tableContainer.innerHTML = '<p class="search-empty-state">No team answers or module completions recorded yet. As your team members complete modules and quizzes, their progress appears here!</p>';
@@ -193,7 +200,7 @@ class AppEngine {
       return;
     }
 
-    let csvContent = 'Timestamp,Full Name,Email,Role,Employee ID,Module ID,Module Title,Action Type,Question Index,Details/Answer,Status\n';
+    let csvContent = 'Timestamp,Full Name,Email,Role,Module ID,Module Title,Action Type,Question Index,Details/Answer,Status\n';
 
     this.teamSubmissions.forEach(sub => {
       const u = sub.user || {};
@@ -203,7 +210,6 @@ class AppEngine {
         `"${u.fullName || ''}"`,
         `"${u.email || ''}"`,
         `"${u.role || ''}"`,
-        `"${u.employeeId || ''}"`,
         `"${sub.moduleId}"`,
         `"${(sub.moduleTitle || '').replace(/"/g, '""')}"`,
         `"${isQuiz ? 'Quiz Question' : 'Module Completion'}"`,
@@ -429,10 +435,10 @@ class AppEngine {
   }
 
   async submitQuizAnswer(moduleId, questionIdx, selectedIdx, correctIdx) {
-    // If user profile is not completed, open modal
-    if (!this.userProfile.fullName) {
-      this.openProfileModal();
-      this.showToast('Please enter your Name and Work Email first to record your quiz answers!', 'warning');
+    // Mandatory Gate Check
+    if (!this.userProfile.fullName || !this.userProfile.email) {
+      this.openProfileModal(true);
+      this.showToast('Please complete registration to submit answers.', 'warning');
       return;
     }
 
@@ -465,9 +471,6 @@ class AppEngine {
     this.teamSubmissions.push(record);
     localStorage.setItem('bb_team_submissions', JSON.stringify(this.teamSubmissions));
 
-    // Post to Optional Free Google Sheet / Webhook
-    this.postToFreeWebhook(record);
-
     // Refresh UI
     const quizCard = document.getElementById(`quiz-card-${questionIdx}`);
     if (quizCard) {
@@ -493,6 +496,11 @@ class AppEngine {
      CHECKLIST STATE TOGGLE
      -------------------------------------------------------------------------- */
   toggleChecklistItem(itemKey, el) {
+    if (!this.userProfile.fullName || !this.userProfile.email) {
+      this.openProfileModal(true);
+      return;
+    }
+
     const isChecked = !this.checklistState[itemKey];
     this.checklistState[itemKey] = isChecked;
     localStorage.setItem('bb_checklists', JSON.stringify(this.checklistState));
@@ -538,11 +546,20 @@ class AppEngine {
   }
 
   navigateToModule(id) {
+    if (!this.userProfile.fullName || !this.userProfile.email) {
+      this.openProfileModal(true);
+      return;
+    }
     this.renderModule(id);
     this.closeMobileSidebar();
   }
 
   toggleModuleCompletion(id) {
+    if (!this.userProfile.fullName || !this.userProfile.email) {
+      this.openProfileModal(true);
+      return;
+    }
+
     if (this.completedModules.has(id)) {
       this.completedModules.delete(id);
       this.showToast(`Module ${id} marked incomplete.`, 'info');
@@ -564,7 +581,6 @@ class AppEngine {
 
       this.teamSubmissions.push(record);
       localStorage.setItem('bb_team_submissions', JSON.stringify(this.teamSubmissions));
-      this.postToFreeWebhook(record);
     }
 
     localStorage.setItem('bb_completed_modules', JSON.stringify([...this.completedModules]));
@@ -601,6 +617,11 @@ class AppEngine {
   }
 
   toggleBookmark(id) {
+    if (!this.userProfile.fullName || !this.userProfile.email) {
+      this.openProfileModal(true);
+      return;
+    }
+
     if (this.bookmarks.has(id)) {
       this.bookmarks.delete(id);
       this.showToast(`Module ${id} removed from bookmarks.`, 'info');
@@ -753,6 +774,10 @@ class AppEngine {
   }
 
   openSearchModal() {
+    if (!this.userProfile.fullName || !this.userProfile.email) {
+      this.openProfileModal(true);
+      return;
+    }
     const dialog = document.getElementById('search-modal');
     const input = document.getElementById('search-modal-input');
     if (dialog) {
@@ -770,6 +795,10 @@ class AppEngine {
      BOOKMARKS DRAWER & MODAL
      -------------------------------------------------------------------------- */
   openBookmarksModal() {
+    if (!this.userProfile.fullName || !this.userProfile.email) {
+      this.openProfileModal(true);
+      return;
+    }
     const modal = document.getElementById('bookmarks-modal');
     const container = document.getElementById('bookmarks-list-container');
     if (!modal || !container) return;
@@ -803,6 +832,11 @@ class AppEngine {
      TEMPLATE DOWNLOAD GENERATOR
      -------------------------------------------------------------------------- */
   downloadTemplate(type) {
+    if (!this.userProfile.fullName || !this.userProfile.email) {
+      this.openProfileModal(true);
+      return;
+    }
+
     let filename = `${type}_template.txt`;
     let content = '';
 
@@ -896,7 +930,7 @@ class AppEngine {
     // User Profile Trigger
     const profileBtn = document.getElementById('user-profile-btn');
     if (profileBtn) {
-      profileBtn.addEventListener('click', () => this.openProfileModal());
+      profileBtn.addEventListener('click', () => this.openProfileModal(false));
     }
 
     // Manager Dashboard Trigger
@@ -911,6 +945,10 @@ class AppEngine {
     const backdrop = document.getElementById('sidebar-backdrop');
     if (mobileBtn && sidebar && backdrop) {
       mobileBtn.addEventListener('click', () => {
+        if (!this.userProfile.fullName || !this.userProfile.email) {
+          this.openProfileModal(true);
+          return;
+        }
         sidebar.classList.toggle('open');
         backdrop.classList.toggle('active');
       });

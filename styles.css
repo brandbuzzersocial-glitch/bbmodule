@@ -1360,3 +1360,10 @@ a:hover {
     font-size: 1.8rem;
   }
 }
+
+.btn-full-width {
+  width: 100%;
+  padding: 12px;
+  font-size: 0.95rem;
+}
+
