@@ -163,6 +163,15 @@ a:hover {
   letter-spacing: -0.02em;
 }
 
+.brand-logo-img {
+  height: 38px;
+  width: auto;
+  max-width: 140px;
+  object-fit: contain;
+  border-radius: var(--radius-sm);
+  display: block;
+}
+
 .logo-icon {
   width: 34px;
   height: 34px;
