@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Brand Buzzer Academy — Internal Training Platform</title>
+  <meta name="description" content="Comprehensive internal training academy for Brand Buzzer Marketing Agency interns and team members. Master agency workflows, social media, ads, web dev, AI automations, and SOPs.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <!-- Top Reading Progress Indicator -->
+  <div id="reading-progress-bar" class="reading-progress-bar" style="width: 0%;"></div>
+
+  <!-- Header Navigation -->
+  <header class="top-header">
+    <div class="header-left">
+      <button id="mobile-menu-btn" class="icon-btn mobile-only" aria-label="Toggle navigation menu">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+      </button>
+      <a href="#" class="brand-logo" onclick="app.navigateToModule(1); return false;">
+        <div class="logo-icon">BB</div>
+        <div class="logo-text">
+          <span class="brand-name">BRAND BUZZER</span>
+          <span class="academy-badge">ACADEMY</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="header-center">
+      <button id="search-trigger-btn" class="search-trigger">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+        <span>Search handbook & SOPs...</span>
+        <kbd class="shortcut-key">Ctrl K</kbd>
+      </button>
+    </div>
+
+    <div class="header-right">
+      <div class="progress-pill-badge" id="overall-progress-pill" title="Overall Academy Completion">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+        <span id="overall-progress-text">0 / 22 Modules (0%)</span>
+      </div>
+
+      <!-- Team Member Profile Button -->
+      <button id="user-profile-btn" class="btn btn-sm btn-ghost" title="Team Member Profile & Free Sync">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+        <span id="header-user-name" class="desktop-only">Team Profile</span>
+      </button>
+
+      <!-- Manager Dashboard Button -->
+      <button id="manager-dashboard-btn" class="btn btn-sm btn-outline-accent" title="Manager Review & Team Submissions">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+        <span class="desktop-only">Team Answers</span>
+      </button>
+
+      <button id="bookmarks-btn" class="icon-btn" title="View Bookmarks" aria-label="View Bookmarks">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path></svg>
+        <span id="bookmark-count-badge" class="badge-count hidden">0</span>
+      </button>
+
+      <button id="theme-toggle-btn" class="icon-btn" title="Toggle Light/Dark Theme" aria-label="Toggle Theme">
+        <svg class="sun-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+        <svg class="moon-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <div class="app-layout">
+    <!-- Sidebar Navigation Overlay for Mobile -->
+    <div id="sidebar-backdrop" class="sidebar-backdrop"></div>
+
+    <!-- Sidebar Navigation -->
+    <aside id="main-sidebar" class="sidebar">
+      <div class="sidebar-search-box">
+        <input type="text" id="sidebar-filter-input" placeholder="Filter modules..." aria-label="Filter modules">
+      </div>
+
+      <nav class="sidebar-nav" id="sidebar-nav-container">
+        <!-- Sidebar Navigation links populated dynamically -->
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="agency-mini-info">
+          <strong>Brand Buzzer Agency</strong>
+          <span>Work From Home Academy v2.0</span>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Content Workspace Area -->
+    <main class="main-content">
+      <div class="content-header-bar">
+        <nav class="breadcrumbs" aria-label="Breadcrumb">
+          <a href="#" onclick="app.navigateToModule(1); return false;">Academy Home</a>
+          <span class="sep">/</span>
+          <span id="breadcrumb-category">Agency Foundations</span>
+          <span class="sep">/</span>
+          <span id="breadcrumb-module" class="active">Module 1</span>
+        </nav>
+
+        <div class="content-actions">
+          <button id="bookmark-module-btn" class="btn btn-sm btn-ghost" title="Bookmark Module">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path></svg>
+            <span id="bookmark-btn-text">Bookmark</span>
+          </button>
+          <button id="complete-module-btn" class="btn btn-sm btn-outline-success">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            <span id="complete-btn-text">Mark Complete</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Module View Container -->
+      <article id="module-container" class="module-view">
+        <!-- Rendered dynamically via app.js -->
+      </article>
+
+      <!-- Bottom Module Pagination Controls -->
+      <nav class="module-pagination" aria-label="Module Navigation">
+        <button id="prev-module-btn" class="btn btn-pagination">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+          <div class="pagination-text">
+            <span class="label">Previous Module</span>
+            <span class="title" id="prev-module-title">---</span>
+          </div>
+        </button>
+
+        <button id="next-module-btn" class="btn btn-pagination btn-next">
+          <div class="pagination-text">
+            <span class="label">Next Module</span>
+            <span class="title" id="next-module-title">---</span>
+          </div>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+        </button>
+      </nav>
+    </main>
+
+    <!-- Table of Contents Sidebar (Right) -->
+    <aside class="toc-sidebar desktop-only">
+      <div class="toc-container">
+        <h4 class="toc-title">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="21" y1="10" x2="3" y2="10"></line><line x1="21" y1="6" x2="3" y2="6"></line><line x1="21" y1="14" x2="3" y2="14"></line><line x1="21" y1="18" x2="3" y2="18"></line></svg>
+          On This Page
+        </h4>
+        <nav id="toc-list" class="toc-list">
+          <!-- Dynamic TOC items -->
+        </nav>
+      </div>
+
+      <div class="quick-support-card">
+        <div class="support-icon">💡</div>
+        <h5>Need Internship Help?</h5>
+        <p>Ask in the internal Slack #agency-help channel or contact your team lead.</p>
+      </div>
+    </aside>
+  </div>
+
+  <!-- Global Search Modal -->
+  <dialog id="search-modal" class="modal-dialog">
+    <div class="modal-backdrop" onclick="app.closeSearchModal()"></div>
+    <div class="modal-content search-modal-content">
+      <div class="search-input-header">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+        <input type="text" id="search-modal-input" placeholder="Search lessons, SOPs, workflows, tools, templates..." autocomplete="off">
+        <button class="close-modal-btn" onclick="app.closeSearchModal()" aria-label="Close search">ESC</button>
+      </div>
+      <div class="search-filter-tabs">
+        <button class="search-tab active" data-filter="all">All Results</button>
+        <button class="search-tab" data-filter="modules">Modules</button>
+        <button class="search-tab" data-filter="sops">SOPs & Checklists</button>
+        <button class="search-tab" data-filter="templates">Templates</button>
+      </div>
+      <div id="search-results-list" class="search-results-list">
+        <div class="search-empty-state">Start typing to search across all 22 training modules...</div>
+      </div>
+    </div>
+  </dialog>
+
+  <!-- Bookmarks Drawer Modal -->
+  <dialog id="bookmarks-modal" class="modal-dialog">
+    <div class="modal-backdrop" onclick="app.closeBookmarksModal()"></div>
+    <div class="modal-content side-drawer-content">
+      <div class="modal-header">
+        <h3>Saved Bookmarks</h3>
+        <button class="icon-btn" onclick="app.closeBookmarksModal()">&times;</button>
+      </div>
+      <div id="bookmarks-list-container" class="bookmarks-list-container">
+        <!-- Rendered bookmarks -->
+      </div>
+    </div>
+  </dialog>
+
+  <!-- Team Member Profile & Free Sync Modal -->
+  <dialog id="profile-modal" class="modal-dialog">
+    <div class="modal-backdrop" onclick="app.closeProfileModal()"></div>
+    <div class="modal-content profile-modal-content">
+      <div class="modal-header">
+        <h3>Team Member Registration & Free Sync</h3>
+        <button class="icon-btn" onclick="app.closeProfileModal()">&times;</button>
+      </div>
+      <div class="profile-modal-body">
+        <p class="profile-intro-text">Fill in your details. Your module completions and quiz responses will be saved automatically so your manager can track your progress.</p>
+        
+        <form id="user-profile-form" onsubmit="app.saveUserProfile(event)">
+          <div class="form-group">
+            <label for="profile-full-name">Full Name *</label>
+            <input type="text" id="profile-full-name" placeholder="e.g. Sarah Jenkins" required>
+          </div>
+
+          <div class="form-group">
+            <label for="profile-email">Work Email *</label>
+            <input type="email" id="profile-email" placeholder="e.g. sarah@brandbuzzer.com" required>
+          </div>
+
+          <div class="form-group">
+            <label for="profile-role">Agency Department / Role *</label>
+            <select id="profile-role" required>
+              <option value="Intern / Trainee">Intern / Trainee</option>
+              <option value="Social Media Strategist">Social Media Strategist</option>
+              <option value="Performance Marketer (Media Buyer)">Performance Marketer (Media Buyer)</option>
+              <option value="Graphic Designer / Creative">Graphic Designer / Creative</option>
+              <option value="Web Developer / Engineer">Web Developer / Engineer</option>
+              <option value="Account Manager">Account Manager</option>
+              <option value="Copywriter / Content Producer">Copywriter / Content Producer</option>
+              <option value="Automation & AI Specialist">Automation & AI Specialist</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="profile-employee-id">Employee / Intern ID</label>
+            <input type="text" id="profile-employee-id" placeholder="e.g. BB-INT-2026">
+          </div>
+
+          <div class="form-group">
+            <label for="webhook-url-input">100% Free Google Sheet / Webhook Sync URL (Optional)</label>
+            <input type="url" id="webhook-url-input" placeholder="https://script.google.com/macros/s/.../exec">
+            <span class="field-hint">Paste free Google Apps Script Webhook URL to sync completion progress directly to a Google Sheet!</span>
+          </div>
+
+          <div class="form-actions">
+            <button type="submit" class="btn btn-primary">Save Profile</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </dialog>
+
+  <!-- Manager Review & Team Quiz Submissions Dashboard Modal -->
+  <dialog id="manager-dashboard-modal" class="modal-dialog">
+    <div class="modal-backdrop" onclick="app.closeManagerModal()"></div>
+    <div class="modal-content manager-modal-content">
+      <div class="modal-header">
+        <h3>Manager Dashboard — Team Progress & Quiz Answers</h3>
+        <button class="icon-btn" onclick="app.closeManagerModal()">&times;</button>
+      </div>
+      <div class="manager-modal-body">
+        <div class="manager-actions-bar">
+          <span id="manager-submissions-count">0 Records Tracked</span>
+          <div class="manager-btn-group">
+            <button class="btn btn-sm btn-primary" onclick="app.exportTeamSubmissionsCSV()">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+              Export Team Progress CSV
+            </button>
+          </div>
+        </div>
+
+        <div id="manager-table-container" class="manager-table-container">
+          <!-- Rendered Team Submissions Table -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div id="toast-container" class="toast-container"></div>
+
+  <!-- Scripts -->
+  <script src="modules-data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
