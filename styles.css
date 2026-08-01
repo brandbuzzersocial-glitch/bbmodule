@@ -1400,19 +1400,46 @@ img, video, iframe, canvas, svg {
   }
 }
 
+/* Sidebar Mobile Drawer Header Styling */
+.sidebar-mobile-header {
+  padding: 16px;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.user-card-mini {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--surface);
+  padding: 8px 12px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.mobile-drawer-actions {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.btn-xs {
+  padding: 4px 8px;
+  font-size: 0.72rem;
+  border-radius: 4px;
+}
+
 /* Smartphone Layout Rules (<= 768px) */
 @media (max-width: 768px) {
   .top-header {
-    height: 58px;
-    padding: 0 10px;
-  }
-
-  .brand-name {
-    font-size: 0.85rem;
-  }
-
-  .academy-badge {
-    font-size: 0.6rem;
+    height: 54px !important;
+    padding: 0 12px !important;
+    gap: 8px;
   }
 
   .brand-logo-img {
@@ -1420,8 +1447,13 @@ img, video, iframe, canvas, svg {
   }
 
   .progress-pill-badge {
-    padding: 4px 8px;
-    font-size: 0.7rem;
+    padding: 4px 10px !important;
+    font-size: 0.75rem !important;
+    height: 32px;
+    display: inline-flex;
+    align-items: center;
+    white-space: nowrap;
+    border-radius: 99px;
   }
 
   .module-hero-title {
@@ -1431,27 +1463,50 @@ img, video, iframe, canvas, svg {
   }
 
   .welcome-hero-title {
-    font-size: 1.85rem !important;
+    font-size: 1.8rem !important;
     line-height: 1.2 !important;
+    margin-bottom: 12px;
   }
 
   .welcome-hero-subtitle {
     font-size: 0.95rem !important;
-    line-height: 1.5 !important;
+    line-height: 1.55 !important;
     margin-bottom: 24px;
   }
 
   .welcome-hero-banner {
-    padding: 28px 16px !important;
+    padding: 32px 18px !important;
+    border-radius: 18px !important;
+    margin-bottom: 24px !important;
   }
 
   .welcome-hero-logo {
     height: 52px;
   }
 
+  .welcome-cta-group {
+    width: 100%;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .btn-hero-primary, .btn-hero-secondary {
+    width: 100% !important;
+    font-size: 0.95rem !important;
+    padding: 12px 18px !important;
+    text-align: center;
+    box-sizing: border-box;
+  }
+
   .welcome-features-grid {
     grid-template-columns: 1fr !important;
-    gap: 12px;
+    gap: 14px;
+    margin-bottom: 24px;
+  }
+
+  .welcome-feature-card {
+    padding: 20px 16px !important;
+    border-radius: 14px !important;
   }
 
   .resource-grid {

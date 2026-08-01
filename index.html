@@ -2,7 +2,7 @@
 <html lang="en" data-theme="light">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Brand Buzzer Academy — Internal Training Platform</title>
   <meta name="description" content="Comprehensive internal training academy for Brand Buzzer Marketing Agency interns and team members. Master agency workflows, social media, ads, web dev, AI automations, and SOPs.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -19,18 +19,18 @@
   <header class="top-header">
     <div class="header-left">
       <button id="mobile-menu-btn" class="icon-btn mobile-only" aria-label="Toggle navigation menu">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
       </button>
-      <a href="#" class="brand-logo" onclick="app.navigateToModule(1); return false;">
+      <a href="#" class="brand-logo" onclick="app.navigateToModule(0); return false;">
         <img src="logo.png" alt="Brand Buzzer Logo" class="brand-logo-img">
-        <div class="logo-text">
+        <div class="logo-text desktop-only">
           <span class="brand-name">BRAND BUZZER</span>
           <span class="academy-badge">ACADEMY</span>
         </div>
       </a>
     </div>
 
-    <div class="header-center">
+    <div class="header-center desktop-only">
       <button id="search-trigger-btn" class="search-trigger">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
         <span>Search handbook & SOPs...</span>
@@ -40,28 +40,33 @@
 
     <div class="header-right">
       <div class="progress-pill-badge" id="overall-progress-pill" title="Overall Academy Completion">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
-        <span id="overall-progress-text">0 / 22 Modules (0%)</span>
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+        <span id="overall-progress-text">0 / 22 (0%)</span>
       </div>
 
+      <!-- Search Trigger Icon for Mobile -->
+      <button class="icon-btn mobile-only" onclick="app.openSearchModal()" title="Search">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+      </button>
+
       <!-- Team Member Profile Button -->
-      <button id="user-profile-btn" class="btn btn-sm btn-ghost" title="Team Member Profile">
+      <button id="user-profile-btn" class="btn btn-sm btn-ghost desktop-only" title="Team Member Profile">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
-        <span id="header-user-name" class="desktop-only">Team Profile</span>
+        <span id="header-user-name">Team Profile</span>
       </button>
 
       <!-- Password-Protected Manager Dashboard Button -->
-      <button id="manager-dashboard-btn" class="btn btn-sm btn-outline-accent" title="Manager Password Protected Review">
+      <button id="manager-dashboard-btn" class="btn btn-sm btn-outline-accent desktop-only" title="Manager Password Protected Review">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
-        <span class="desktop-only">Team Answers</span>
+        <span>Team Answers</span>
       </button>
 
-      <button id="bookmarks-btn" class="icon-btn" title="View Bookmarks" aria-label="View Bookmarks">
+      <button id="bookmarks-btn" class="icon-btn desktop-only" title="View Bookmarks" aria-label="View Bookmarks">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path></svg>
         <span id="bookmark-count-badge" class="badge-count hidden">0</span>
       </button>
 
-      <button id="theme-toggle-btn" class="icon-btn" title="Toggle Light/Dark Theme" aria-label="Toggle Theme">
+      <button id="theme-toggle-btn" class="icon-btn desktop-only" title="Toggle Light/Dark Theme" aria-label="Toggle Theme">
         <svg class="sun-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
         <svg class="moon-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
       </button>
@@ -75,6 +80,19 @@
 
     <!-- Sidebar Navigation -->
     <aside id="main-sidebar" class="sidebar">
+      <!-- Mobile Quick Actions & Profile Header -->
+      <div class="sidebar-mobile-header mobile-only">
+        <div class="user-card-mini">
+          <span id="sidebar-user-label" class="user-name-text">👤 Register Profile</span>
+          <button class="btn btn-xs btn-outline-accent" onclick="app.openProfileModal(false)">Edit</button>
+        </div>
+        <div class="mobile-drawer-actions">
+          <button class="btn btn-xs btn-outline-accent" onclick="app.openManagerModal()">🔒 Manager Portal</button>
+          <button class="btn btn-xs btn-ghost" onclick="app.openBookmarksModal()">★ Bookmarks</button>
+          <button class="btn btn-xs btn-ghost" onclick="app.toggleTheme()">Theme ☀️/🌙</button>
+        </div>
+      </div>
+
       <div class="sidebar-search-box">
         <input type="text" id="sidebar-filter-input" placeholder="Filter modules..." aria-label="Filter modules">
       </div>
@@ -95,11 +113,11 @@
     <main class="main-content">
       <div class="content-header-bar">
         <nav class="breadcrumbs" aria-label="Breadcrumb">
-          <a href="#" onclick="app.navigateToModule(1); return false;">Academy Home</a>
+          <a href="#" onclick="app.navigateToModule(0); return false;">Academy Home</a>
           <span class="sep">/</span>
-          <span id="breadcrumb-category">Agency Foundations</span>
+          <span id="breadcrumb-category">Agency Overview</span>
           <span class="sep">/</span>
-          <span id="breadcrumb-module" class="active">Module 1</span>
+          <span id="breadcrumb-module" class="active">Welcome Page</span>
         </nav>
 
         <div class="content-actions">

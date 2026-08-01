@@ -62,13 +62,14 @@ class AppEngine {
      -------------------------------------------------------------------------- */
   updateHeaderProfileBadge() {
     const nameEl = document.getElementById('header-user-name');
-    if (nameEl) {
-      if (this.userProfile && this.userProfile.fullName) {
-        nameEl.textContent = `${this.userProfile.fullName} (${this.userProfile.role.split(' ')[0]})`;
-      } else {
-        nameEl.textContent = 'Register Profile';
-      }
-    }
+    const sidebarUserLabel = document.getElementById('sidebar-user-label');
+
+    const formattedName = (this.userProfile && this.userProfile.fullName)
+      ? `${this.userProfile.fullName} (${this.userProfile.role.split(' ')[0]})`
+      : '👤 Register Profile';
+
+    if (nameEl) nameEl.textContent = formattedName;
+    if (sidebarUserLabel) sidebarUserLabel.textContent = formattedName;
 
     // Populate profile modal inputs
     const nameInput = document.getElementById('profile-full-name');
@@ -815,8 +816,15 @@ class AppEngine {
 
     const progressText = document.getElementById('overall-progress-text');
     if (progressText) {
-      progressText.textContent = `${completed} / ${total} Modules (${percent}%)`;
+      progressText.textContent = `${completed}/${total} (${percent}%)`;
     }
+  }
+
+  toggleTheme() {
+    this.theme = this.theme === 'light' ? 'dark' : 'light';
+    document.documentElement.setAttribute('data-theme', this.theme);
+    localStorage.setItem('bb_theme', this.theme);
+    this.showToast(`Switched to ${this.theme} mode`, 'info');
   }
 
   /* --------------------------------------------------------------------------
