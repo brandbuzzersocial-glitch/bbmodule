@@ -31,13 +31,15 @@ class AppEngine {
     // Apply Theme (Default Light)
     document.documentElement.setAttribute('data-theme', this.theme);
 
-    // Initial Hash Check or Default Module
+    // Initial Hash Check or Default Welcome Page (0)
     const hash = window.location.hash;
     if (hash && hash.startsWith('#module-')) {
       const parsedId = parseInt(hash.replace('#module-', ''), 10);
       if (parsedId >= 1 && parsedId <= ACADEMY_MODULES.length) {
         this.currentModuleId = parsedId;
       }
+    } else if (hash === '#welcome' || !hash) {
+      this.currentModuleId = 0;
     }
 
     // Render Components
@@ -297,6 +299,19 @@ class AppEngine {
     const navContainer = document.getElementById('sidebar-nav-container');
     if (!navContainer) return;
 
+    // Welcome Link Section
+    let html = `
+      <div class="nav-section">
+        <div class="nav-section-title">Getting Started</div>
+        <a href="#welcome" 
+           class="nav-module-link ${this.currentModuleId === 0 ? 'active' : ''}" 
+           onclick="app.navigateToModule(0); return false;">
+          <span class="module-title-text">Welcome & Overview</span>
+          <span class="module-status-icon">★</span>
+        </a>
+      </div>
+    `;
+
     // Group by category
     const categories = {};
     ACADEMY_MODULES.forEach(mod => {
@@ -306,7 +321,6 @@ class AppEngine {
       categories[mod.category].push(mod);
     });
 
-    let html = '';
     for (const [catName, modules] of Object.entries(categories)) {
       html += `
         <div class="nav-section">
@@ -337,9 +351,99 @@ class AppEngine {
   }
 
   /* --------------------------------------------------------------------------
+     WELCOME HERO INTRO PAGE RENDERER
+     -------------------------------------------------------------------------- */
+  renderWelcomePage() {
+    this.currentModuleId = 0;
+    window.location.hash = '#welcome';
+
+    document.getElementById('breadcrumb-category').textContent = 'Academy Overview';
+    document.getElementById('breadcrumb-module').textContent = 'Welcome Page';
+
+    // Hide complete & bookmark buttons on welcome page
+    document.getElementById('complete-module-btn').style.display = 'none';
+    document.getElementById('bookmark-module-btn').style.display = 'none';
+
+    const container = document.getElementById('module-container');
+    container.innerHTML = `
+      <div class="welcome-hero-banner">
+        <div class="welcome-badge-tag">OFFICIAL INTERNAL ACADEMY</div>
+        <img src="logo.png" alt="Brand Buzzer Logo" class="welcome-hero-logo">
+        <h1 class="welcome-hero-title">WELCOME TO BRAND BUZZER</h1>
+        <p class="welcome-hero-subtitle">Master our remote digital marketing agency workflows, paid ad strategies, custom web coding, packaging design systems, AI automations, and operational SOPs.</p>
+        <div class="welcome-cta-group">
+          <button class="btn btn-hero-primary" onclick="app.navigateToModule(1)">
+            Begin Training — Start Module 1 ➔
+          </button>
+          <button class="btn btn-hero-secondary" onclick="app.openManagerModal()">
+            Manager Dashboard
+          </button>
+        </div>
+      </div>
+
+      <div class="welcome-features-grid">
+        <div class="welcome-feature-card">
+          <div class="feature-card-icon">🚀</div>
+          <h3>22 Training Modules</h3>
+          <p>Structured masterclasses covering culture, services, client onboarding, ad campaigns, and SOPs.</p>
+        </div>
+        <div class="welcome-feature-card">
+          <div class="feature-card-icon">🎯</div>
+          <h3>7 Core Services</h3>
+          <p>In-depth workflows for Social Media, Performance Marketing, Custom Web Dev, Complete Branding & Packaging.</p>
+        </div>
+        <div class="welcome-feature-card">
+          <div class="feature-card-icon">🔑</div>
+          <h3>24 Business Account SOPs</h3>
+          <p>Setup guides for Meta Portfolio, GA4, GTM, Google Ads MCC, Shopify Liquid, and Cloudflare CDN.</p>
+        </div>
+        <div class="welcome-feature-card">
+          <div class="feature-card-icon">📁</div>
+          <h3>9 Editable Templates</h3>
+          <p>Downloadable CSV & TXT agency templates for onboarding, content calendars, briefs, and publishing.</p>
+        </div>
+      </div>
+
+      <div class="callout callout-sop">
+        <div class="callout-icon">💡</div>
+        <div class="callout-body">
+          <span class="callout-title">How To Complete Your Academy Internship Training</span>
+          <p>1. Progress through each of the 22 modules sequentially.<br>
+          2. Complete the interactive action items in Section 8 of each module.<br>
+          3. Test your knowledge in Section 10 quizzes.<br>
+          4. Click <strong>"Mark Complete"</strong> at the top of each module to record your graduation progress.</p>
+        </div>
+      </div>
+    `;
+
+    // Update Pagination for Welcome Page
+    const prevBtn = document.getElementById('prev-module-btn');
+    const nextBtn = document.getElementById('next-module-btn');
+    const nextTitle = document.getElementById('next-module-title');
+
+    prevBtn.style.visibility = 'hidden';
+    nextBtn.style.visibility = 'visible';
+    nextTitle.textContent = '1. Agency Overview & Culture';
+    nextBtn.onclick = () => this.navigateToModule(1);
+
+    this.buildTableOfContents();
+    this.buildSidebarNav();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  /* --------------------------------------------------------------------------
      MODULE CONTENT RENDERER
      -------------------------------------------------------------------------- */
   renderModule(id) {
+    if (id === 0) {
+      this.renderWelcomePage();
+      return;
+    }
+
+    // Restore complete & bookmark buttons for regular modules
+    document.getElementById('complete-module-btn').style.display = 'inline-flex';
+    document.getElementById('bookmark-module-btn').style.display = 'inline-flex';
+
     const mod = ACADEMY_MODULES.find(m => m.id === id);
     if (!mod) return;
 
